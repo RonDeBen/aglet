@@ -1,9 +1,6 @@
-pub mod checkpoint;
 pub mod init;
-pub mod log;
 pub mod policy;
 pub mod run;
-pub mod show;
 
 use crate::error::Result;
 use crate::execute::Execute;
@@ -33,16 +30,10 @@ pub struct CommandContext {
 pub enum AgentSubcommand {
     /// Initialize agent metadata and map codebase
     Init(init::InitCommand),
-    /// Run orchestrator for a task
+    /// Run an agent task
     Run(run::RunCommand),
-    /// Show audit log
-    Log(log::LogCommand),
     /// Manage modular policies
     Policy(policy::PolicyCommand),
-    /// Show a specific commit
-    Show(show::ShowCommand),
-    /// Create a human checkpoint
-    Checkpoint(checkpoint::CheckpointCommand),
 }
 
 impl AgentCli {
@@ -60,10 +51,7 @@ impl Execute for AgentCli {
         match &self.sub_command {
             AgentSubcommand::Init(cmd) => cmd.execute(ctx).await,
             AgentSubcommand::Run(cmd) => cmd.execute(ctx).await,
-            AgentSubcommand::Log(cmd) => cmd.execute(ctx).await,
             AgentSubcommand::Policy(cmd) => cmd.execute(ctx).await,
-            AgentSubcommand::Show(cmd) => cmd.execute(ctx).await,
-            AgentSubcommand::Checkpoint(cmd) => cmd.execute(ctx).await,
         }
     }
 }

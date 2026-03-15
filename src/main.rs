@@ -2,8 +2,8 @@ mod adapters;
 mod commands;
 mod error;
 mod execute;
-mod prov;
 mod utils;
+mod workspace;
 
 use clap::Parser;
 use env_logger::Env;
