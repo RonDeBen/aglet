@@ -1,0 +1,28 @@
+{
+  "id": "87c534b9-a5e9-47a2-aa08-44675c3aee10",
+  "parents": [],
+  "agent_id": "planner-1",
+  "agent_version": "0.1.0",
+  "team_id": "default-team",
+  "timestamp": "2026-03-15T18:15:08.393513Z",
+  "worktree": "feature/agent-run",
+  "scope_path": ".",
+  "prompt_snippet": "Plan for task: smoke test provenance flow",
+  "output_ref": "blob:plan-1",
+  "output_summary": "Plan for task: smoke test provenance flow",
+  "evidence_refs": [
+    "map:v1"
+  ],
+  "tool_calls": [],
+  "decision_tags": [
+    "plan:initial"
+  ],
+  "iteration": 1,
+  "budget": {
+    "tokens_used": null,
+    "time_ms": null
+  },
+  "signature": "agent/planner-1@0.1",
+  "human_ready": false,
+  "proposed_branch": null
+}
