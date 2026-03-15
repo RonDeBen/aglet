@@ -2,8 +2,7 @@ use super::CommandContext;
 use crate::commands::policy::store::PolicyStore;
 use crate::error::Result;
 use crate::execute::Execute;
-use crate::workspace::store::{WorkspaceDocument, WorkspaceStore, workspace_doc_id};
-use chrono::Utc;
+use crate::workspace::store::WorkspaceStore;
 use clap::Args;
 use std::fs;
 use walkdir::WalkDir;
@@ -54,7 +53,6 @@ impl Execute for InitCommand {
                     modules.push(e.file_name().to_string_lossy().to_string());
                 }
             }
-            let now = Utc::now();
             let map_contents = format!(
                 "# Codebase Map\n\nRoot: {}\n\nTop-level directories:\n{}\n",
                 root.display(),
@@ -65,22 +63,8 @@ impl Execute for InitCommand {
                     .join("\n")
             );
             let workspace_store = WorkspaceStore::new(agents_dir.clone());
-            let doc_id = workspace_doc_id("codebase-map", ".", now);
-            let artifact_ref = workspace_store.write_object(
-                &format!("{}-artifact", doc_id),
-                "md",
-                &map_contents,
-            )?;
-            let document = WorkspaceDocument {
-                id: doc_id.clone(),
-                scope_path: ".".into(),
-                kind: "codebase-map".into(),
-                summary: format!("Top-level codebase map for {} modules.", modules.len()),
-                artifact_ref,
-                updated_at: now,
-            };
-            workspace_store.write_document(&document)?;
-            workspace_store.write_ref("workspace-map", &doc_id)?;
+            let artifact_ref = workspace_store.write_object("workspace-overview", "md", &map_contents)?;
+            workspace_store.write_ref("workspace-overview", &artifact_ref)?;
             log::info!("agent: mapped codebase and wrote map:v1");
         } else {
             log::info!("agent: init completed (mapping skipped)");

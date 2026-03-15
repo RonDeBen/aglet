@@ -1,6 +1,10 @@
+pub mod context;
 pub mod init;
+pub mod log;
+pub mod merge;
 pub mod policy;
 pub mod run;
+pub mod show;
 
 use crate::error::Result;
 use crate::execute::Execute;
@@ -32,6 +36,14 @@ pub enum AgentSubcommand {
     Init(init::InitCommand),
     /// Run an agent task
     Run(run::RunCommand),
+    /// Merge a completed run's branch into the current branch and clean up its worktree
+    Merge(merge::MergeCommand),
+    /// Show audit log of all agent runs
+    Log(log::LogCommand),
+    /// Show full details for a run or step by ID
+    Show(show::ShowCommand),
+    /// Assemble and print agent context for a task
+    Context(context::ContextCommand),
     /// Manage modular policies
     Policy(policy::PolicyCommand),
 }
@@ -51,6 +63,10 @@ impl Execute for AgentCli {
         match &self.sub_command {
             AgentSubcommand::Init(cmd) => cmd.execute(ctx).await,
             AgentSubcommand::Run(cmd) => cmd.execute(ctx).await,
+            AgentSubcommand::Merge(cmd) => cmd.execute(ctx).await,
+            AgentSubcommand::Log(cmd) => cmd.execute(ctx).await,
+            AgentSubcommand::Show(cmd) => cmd.execute(ctx).await,
+            AgentSubcommand::Context(cmd) => cmd.execute(ctx).await,
             AgentSubcommand::Policy(cmd) => cmd.execute(ctx).await,
         }
     }
